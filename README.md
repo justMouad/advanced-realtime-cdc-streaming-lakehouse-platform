@@ -1,4 +1,4 @@
-<div align="center">
+
 
 # 🛰️ CDC Lakehouse Platform
 
@@ -6,18 +6,7 @@
 
 Postgres · Debezium · Kafka · Spark Structured Streaming · Apache Iceberg · Trino · Superset
 
-[![CI](https://github.com/your-org/cdc-lakehouse-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/cdc-lakehouse-platform/actions/workflows/ci.yml)
-[![Docker](https://github.com/your-org/cdc-lakehouse-platform/actions/workflows/docker.yml/badge.svg)](https://github.com/your-org/cdc-lakehouse-platform/actions/workflows/docker.yml)
-[![codecov](https://img.shields.io/codecov/c/github/your-org/cdc-lakehouse-platform?logo=codecov)](https://codecov.io/gh/your-org/cdc-lakehouse-platform)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
-[![Spark 3.5](https://img.shields.io/badge/spark-3.5.1-E25A1C?logo=apachespark&logoColor=white)](https://spark.apache.org/)
-[![Iceberg](https://img.shields.io/badge/iceberg-1.5-2496ED?logo=apache&logoColor=white)](https://iceberg.apache.org/)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Ruff](https://img.shields.io/badge/linter-ruff-D7FF64?logo=ruff&logoColor=black)](https://github.com/astral-sh/ruff)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-fe5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
 
-</div>
 
 ---
 
@@ -46,21 +35,21 @@ marts that power BI dashboards.
 ## 2. Architecture
 
 ```
-┌──────────┐  WAL   ┌──────────┐  Avro  ┌────────┐ micro-batch ┌──────────────────┐
-│ Postgres │───────▶│ Debezium │───────▶│ Kafka  │────────────▶│ Spark Structured │
-│  (OLTP)  │ logical│ (Connect)│ +Schema│        │exactly-once │    Streaming     │
-└──────────┘ repl.  └──────────┘  Reg.  └────────┘             └────────┬─────────┘
-                                                                         │
-              ┌──────────────── Medallion (Apache Iceberg) ─────────────▼──────────┐
-              │  BRONZE (raw append) → SILVER (dedup/SCD/current) → GOLD (marts)    │
-              └───────────────────────────────┬──────────────────────────────────────┘
-                                               │ ANSI SQL
-                                         ┌─────▼─────┐     ┌───────────┐
-                                         │   Trino   │────▶│  Superset │
-                                         └───────────┘     └───────────┘
+┌──────────┐  WAL   ┌──────────┐  Avro  ┌────────┐ micro-batch ┌──────────────────┐
+│ Postgres │───────▶│ Debezium │───────▶│ Kafka  │────────────▶│ Spark Structured │
+│  (OLTP)  │ logical│ (Connect)│ +Schema│        │exactly-once │    Streaming     │
+└──────────┘ repl.  └──────────┘  Reg.  └────────┘             └────────┬─────────┘
+                                                                         │
+              ┌──────────────── Medallion (Apache Iceberg) ─────────────▼──────────┐
+              │  BRONZE (raw append) → SILVER (dedup/SCD/current) → GOLD (marts)    │
+              └───────────────────────────────┬──────────────────────────────────────┘
+                                               │ ANSI SQL
+                                         ┌─────▼─────┐     ┌───────────┐
+                                         │   Trino   │────▶│  Superset │
+                                         └───────────┘     └───────────┘
 
-  Orchestration: Airflow · Transforms: dbt · Contracts: Great Expectations
-  Observability: Prometheus + Grafana · Ship: Docker Compose / K8s / GitHub Actions
+  Orchestration: Airflow · Transforms: dbt · Contracts: Great Expectations
+  Observability: Prometheus + Grafana · Ship: Docker Compose / K8s / GitHub Actions
 ```
 
 Rich diagrams (system, CDC flow, sequence, medallion, deployment) live in
@@ -114,25 +103,25 @@ See [`docs/DESIGN_DECISIONS.md`](docs/DESIGN_DECISIONS.md) for the *why*.
 
 ```
 cdc-lakehouse-platform/
-├── docker-compose.yml            # Full local stack
-├── Makefile                      # One-word entrypoints
-├── pyproject.toml                # Packaging, ruff, mypy, pytest
-├── .env.example                  # 12-factor config
-├── src/cdc_platform/             # Installable Python package
-│   ├── common/                   #   config, logging, metrics, retries, registry
-│   ├── ingestion/                #   Debezium connector management
-│   ├── streaming/                #   bronze / silver / gold jobs + engine
-│   ├── quality/                  #   Great Expectations runner
-│   └── generators/               #   seed loader + change simulator
-├── infra/                        # Service configs (postgres, debezium, trino, ...)
-├── dbt/                          # Gold transformations
-├── great_expectations/           # Data contracts
-├── airflow/dags/                 # Orchestration
-├── k8s/                          # Kustomize base + overlays
-├── scripts/                      # register connectors, submit spark, smoke test
-├── tests/                        # unit + integration
-├── docs/                         # diagrams, ADRs, design, interview Q&A
-└── .github/workflows/            # CI, docker, release
+├── docker-compose.yml            # Full local stack
+├── Makefile                      # One-word entrypoints
+├── pyproject.toml                # Packaging, ruff, mypy, pytest
+├── .env.example                  # 12-factor config
+├── src/cdc_platform/             # Installable Python package
+│   ├── common/                   #   config, logging, metrics, retries, registry
+│   ├── ingestion/                #   Debezium connector management
+│   ├── streaming/                #   bronze / silver / gold jobs + engine
+│   ├── quality/                  #   Great Expectations runner
+│   └── generators/               #   seed loader + change simulator
+├── infra/                        # Service configs (postgres, debezium, trino, ...)
+├── dbt/                          # Gold transformations
+├── great_expectations/           # Data contracts
+├── airflow/dags/                 # Orchestration
+├── k8s/                          # Kustomize base + overlays
+├── scripts/                      # register connectors, submit spark, smoke test
+├── tests/                        # unit + integration
+├── docs/                         # diagrams, ADRs, design, interview Q&A
+└── .github/workflows/            # CI, docker, release
 ```
 
 ## 7. Quickstart
@@ -143,16 +132,15 @@ cdc-lakehouse-platform/
 Requires Docker 24+, Compose v2, ~8 GB RAM free.
 
 ```bash
-git clone https://github.com/your-org/cdc-lakehouse-platform.git
 cd cdc-lakehouse-platform
-make up                    # boot the full stack
-make register-connectors   # arm Debezium against all 5 tables
-make seed                  # load a realistic baseline dataset
-make bronze                # start Bronze streaming job
-make silver                # start Silver streaming job
-make simulate              # continuous INSERT/UPDATE/DELETE traffic
-make dbt-run               # build Gold marts
-make gx                    # run data-quality checkpoints
+make up                    # boot the full stack
+make register-connectors   # arm Debezium against all 5 tables
+make seed                  # load a realistic baseline dataset
+make bronze                # start Bronze streaming job
+make silver                # start Silver streaming job
+make simulate              # continuous INSERT/UPDATE/DELETE traffic
+make dbt-run               # build Gold marts
+make gx                    # run data-quality checkpoints
 ```
 
 | Service | URL | Credentials |
@@ -184,28 +172,19 @@ All 15 services running locally via Docker Compose:
 Full treatment in [`docs/DESIGN_DECISIONS.md`](docs/DESIGN_DECISIONS.md). Headlines:
 
 - **Scale-out** is horizontal at every hop: partition Kafka by PK hash, add Spark
-  executors, async Iceberg compaction, Trino workers scale with query load.
+  executors, async Iceberg compaction, Trino workers scale with query load.
 - **Primary bottleneck** is single-slot Postgres logical decoding; mitigated by
-  publication filtering, `pgoutput`, and (extreme scale) sharded slots.
+  publication filtering, `pgoutput`, and (extreme scale) sharded slots.
 - **Key tradeoff**: micro-batch latency (seconds) vs. true continuous — chosen for
-  Iceberg commit atomicity and operational simplicity.
+  Iceberg commit atomicity and operational simplicity.
 - **Future**: Flink for sub-second SLAs, Iceberg WAP branching, automated
-  backfill/replay tooling, cross-region DR.
+  backfill/replay tooling, cross-region DR.
 
 ## 10. Testing & quality gates
 
 ```bash
-make lint              # ruff + black + mypy (strict)
-make test              # unit tests, 80% coverage gate
-make test-integration  # end-to-end against compose
-make gx                # Great Expectations contracts
+make lint              # ruff + black + mypy (strict)
+make test              # unit tests, 80% coverage gate
+make test-integration  # end-to-end against compose
+make gx                # Great Expectations contracts
 ```
-
-## 11. Interview prep
-
-Module-by-module questions **with answers** in
-[`docs/interview/`](docs/interview/).
-
-## 12. License
-
-MIT — see [LICENSE](LICENSE).
